@@ -3,18 +3,9 @@ import pandas as pd
 import numpy as np
 import joblib
 
-@st.cache_data
-def load_data_and_model():
-    # Load data
-    df = pd.read_csv('df.csv')
 
-    # Load model
-    model = joblib.load('pipe.pkl.gz')
-
-    return df, model
-
-# Call the function to load data and model
-df, model = load_data_and_model()
+df = pd.read_csv('df.csv')
+model = joblib.load('pipe.pkl.gz')
 
 # Streamlit app code continues from here
 st.title("**Instant Car Value Checker⚡**")
