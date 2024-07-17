@@ -5,28 +5,24 @@ import joblib
 import requests
 from io import BytesIO
 
-# Function to download file from Google Drive
-def download_file_from_google_drive(url):
-    file_id = url.split('/')[-2]
-    dwn_url = f"https://drive.google.com/uc?export=download&id={file_id}"
-    response = requests.get(dwn_url)
-    response.raise_for_status()
-    return response.content
-
-@st.cache_resource
-def load_data_and_model():
+@st.cache_data
+def load_data():
     # Load data
     df = pd.read_csv('df.csv')
+    return df
 
+@st.cache_resource
+def load_model():
     # Download and load model
-    model_url = 'https://drive.google.com/file/d/1VC477JxlflH_IVbxda6PZh1ItR7yBAFQ/view?usp=drivesdk'
-    model_data = download_file_from_google_drive(model_url)
-    model = joblib.load(BytesIO(model_data))
+    model_url = 'https://drive.google.com/uc?export=download&id=1VC477JxlflH_IVbxda6PZh1ItR7yBAFQ'
+    response = requests.get(model_url)
+    response.raise_for_status()
+    model = joblib.load(BytesIO(response.content))
+    return model
 
-    return df, model
-
-# Call the function to load data and model
-df, model = load_data_and_model()
+# Load data and model
+df = load_data()
+model = load_model()
 
 # Streamlit app code continues from here
 st.title("**Instant Car Value Checker⚡**")
