@@ -83,4 +83,4 @@ if st.session_state.show_inputs:
             'Kilometers_Driven': [st.session_state.inputs['kilometers_driven']]
         })
         output = np.round(model.predict(input_data)[0], 2)
-        st.wri te(f"You can sell this car for approximately ₹{output} lakhs.")
+        st.write(f"You can sell this car for approximately ₹{output} lakhs.")
