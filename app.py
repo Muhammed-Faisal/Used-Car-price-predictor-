@@ -2,22 +2,16 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import gzip
-import joblib
-import shutil
+import pickle as pkl
 
 # Function to load data and model (cached with st.cache_resource)
 @st.cache_resource
 def load_data_and_model():
     # Load data
     df = pd.read_csv('df.csv')
-
     # Decompress the model
-    with gzip.open('pipe.pkl.gz', 'rb') as f_in:
-        with open('pipe.pkl', 'wb') as f_out:
-            shutil.copyfileobj(f_in, f_out)
-    # Load the decompressed model
-    model = joblib.load('pipe.pkl')
-
+    with gzip.open('pipe.pkl.gz', 'rb') as f:
+        model=pll.load(f)
     return df, model
 
 # Load data and model
