@@ -19,12 +19,12 @@ def load_data_and_model():
 # Load data and model
 df, model = load_data_and_model()
 
-# Streamlit app code continues from here
+# Streamlit app code starts here
 st.title("**Instant Car Value Checker⚡**")
 st.caption("*-by Md Faisal*")
 st.caption("*Welcome to the instant car value checker app! This tool helps you estimate the value of your used car based on various factors.*")
 
-# Sidebar
+# Sidebar for connecting with author and providing feedback
 st.sidebar.header("Connect with me")
 st.sidebar.markdown("""
 <a href="https://www.linkedin.com/in/md-fsl" target="_blank">
@@ -41,7 +41,7 @@ st.sidebar.markdown("""
 st.sidebar.write("**Have any suggestions?**")
 st.sidebar.write("*Please do let me know at mdf1234786143@gmail.com*")
 
-# Initialize session state
+# Initialize session state for user inputs
 if 'show_inputs' not in st.session_state:
     st.session_state.show_inputs = False
 
@@ -56,14 +56,18 @@ if 'inputs' not in st.session_state:
         'kilometers_driven': 0
     }
 
+# Function to clear inputs
 def clear_inputs():
     for key in st.session_state.inputs.keys():
         st.session_state.inputs[key] = ''
 
+# Button to show inputs form
 if st.button("Enter Car Details"):
     st.session_state.show_inputs = True
 
+# Display inputs form if button is clicked
 if st.session_state.show_inputs:
+    # Dropdowns and inputs for user to enter car details
     st.session_state.inputs['brand'] = st.selectbox('Brand : ', df['Brand'].sort_values().unique(), index=df['Brand'].sort_values().unique().tolist().index(st.session_state.inputs['brand']) if st.session_state.inputs['brand'] else 0, key='brand')
     name_options = df[df['Brand'] == st.session_state.inputs['brand']]['Name'].sort_values().unique() if st.session_state.inputs['brand'] else []
     st.session_state.inputs['name'] = st.selectbox('Model : ', name_options, index=name_options.tolist().index(st.session_state.inputs['name']) if st.session_state.inputs['name'] in name_options else 0, key='name')
@@ -73,6 +77,7 @@ if st.session_state.show_inputs:
     st.session_state.inputs['engine'] = st.number_input('Engine (cc) : ', min_value=int(df['Engine'].min()), max_value=int(df['Engine'].max()), value=int(st.session_state.inputs['engine']) if st.session_state.inputs['engine'] else int(df['Engine'].mean()))
     st.session_state.inputs['kilometers_driven'] = st.slider('Kilometers Driven : ', min_value=int(df['Kilometers_Driven'].min()), max_value=int(df['Kilometers_Driven'].max()), value=int(st.session_state.inputs['kilometers_driven']) if st.session_state.inputs['kilometers_driven'] else int(np.mean(df['Kilometers_Driven'])))
 
+    # Button to predict car value
     if st.button("Know Your Car's Worth") and all(st.session_state.inputs.values()):
         input_data = pd.DataFrame({
             'Brand': [st.session_state.inputs['brand']],
