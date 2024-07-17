@@ -1,7 +1,4 @@
 streamlit
-protobuf
-altair
 pandas
 scikit-learn
 numpy
-requests
