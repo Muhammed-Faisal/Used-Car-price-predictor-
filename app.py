@@ -5,7 +5,7 @@ import gzip
 import pickle
 
 
-logging.basicConfig(level=logging.DEBUG)
+
 # Function to load data and model (cached with st.cache_resource)
 @st.cache_resource
 def load_data_and_model():
