@@ -5,7 +5,7 @@ import gzip
 import pickle as pkl
 
 # Function to load data and model (cached with st.cache_resource)
-@st.cache_resource
+@st.cache_data
 def load_data_and_model():
     # Load data
     df = pd.read_csv('df.csv')
