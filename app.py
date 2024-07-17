@@ -1,28 +1,22 @@
+%%writefile app.py
 import streamlit as st
 import pandas as pd
 import numpy as np
-import joblib
-import requests
-from io import BytesIO
+import gzip
+import pickle as pkl
 
-@st.cache_data
-def load_data():
-    # Load data
-    df = pd.read_csv('df.csv')
-    return df
 
 @st.cache_resource
-def load_model():
-    # Download and load model
-    model_url = 'https://drive.google.com/uc?export=download&id=1VC477JxlflH_IVbxda6PZh1ItR7yBAFQ'
-    response = requests.get(model_url)
-    response.raise_for_status()
-    model = joblib.load(BytesIO(response.content))
-    return model
+def load_data_and_model():
+    # Load data
+    df = pd.read_csv('df.csv')
+    # Decompress the model
+    with gzip.open('model.gz', 'rb') as f:
+        model=pkl.load(f)
+    return df, model
 
 # Load data and model
-df = load_data()
-model = load_model()
+df, model = load_data_and_model()
 
 # Streamlit app code continues from here
 st.title("**Instant Car Value Checker⚡**")
@@ -42,7 +36,8 @@ st.sidebar.markdown("""
 <img src="https://cdn4.iconfinder.com/data/icons/logos-and-brands/512/189_Kaggle_logo_logos-1024.png" width="30" height="30">
 </a>
 """, unsafe_allow_html=True)
-
+st.sidebar.header("")
+st.sidebar.write("")
 st.sidebar.write("**Have any suggestions?**")
 st.sidebar.write("*Please do let me know at mdf1234786143@gmail.com*")
 
@@ -89,4 +84,4 @@ if st.session_state.show_inputs:
             'Kilometers_Driven': [st.session_state.inputs['kilometers_driven']]
         })
         output = np.round(model.predict(input_data)[0], 2)
-        st.write(f"You can sell this car for approximately ₹{output} lakhs.")
+        st.wri te(f"You can sell this car for approximately ₹{output} lakhs.")
