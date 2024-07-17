@@ -11,7 +11,7 @@ def load_data_and_model():
     df = pd.read_csv('df.csv')
     # Decompress the model
     with gzip.open('pipe.pkl.gz', 'rb') as f:
-        model=pll.load(f)
+        model=pkl.load(f)
     return df, model
 
 # Load data and model
