@@ -1,3 +1,4 @@
+%%writefile app.py
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -10,7 +11,7 @@ def load_data_and_model():
     # Load data
     df = pd.read_csv('df.csv')
     # Decompress the model
-    with gzip.open('pipe.pkl.gz', 'rb') as f:
+    with gzip.open('model.gz', 'rb') as f:
         model=pkl.load(f)
     return df, model
 
