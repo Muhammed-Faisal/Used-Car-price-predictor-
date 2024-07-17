@@ -1,20 +1,31 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-import gzip
-import pickle as pkl
+import joblib
+import requests
+from io import BytesIO
 
-# Function to load data and model (cached with st.cache_resource)
-@st.cache_data
+# Function to download file from Google Drive
+def download_file_from_google_drive(url):
+    file_id = url.split('/')[-2]
+    dwn_url = f"https://drive.google.com/uc?export=download&id={file_id}"
+    response = requests.get(dwn_url)
+    response.raise_for_status()
+    return response.content
+
+@st.cache_resource
 def load_data_and_model():
     # Load data
     df = pd.read_csv('df.csv')
-    # Decompress the model
-    with gzip.open('model.gz', 'rb') as f:
-        model=pkl.load(f)
+
+    # Download and load model
+    model_url = 'https://drive.google.com/file/d/1VC477JxlflH_IVbxda6PZh1ItR7yBAFQ/view?usp=drivesdk'
+    model_data = download_file_from_google_drive(model_url)
+    model = joblib.load(BytesIO(model_data))
+
     return df, model
 
-# Load data and model
+# Call the function to load data and model
 df, model = load_data_and_model()
 
 # Streamlit app code continues from here
